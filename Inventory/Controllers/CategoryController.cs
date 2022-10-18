@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Inventory.Models;
 using Inventory.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -12,24 +13,28 @@ namespace Inventory.Controllers
         [HttpGet]
         public List<Category> Get()
         {
-            return CategoryService.GetAll();
+            CategoryService service = new CategoryService();
+            return service.GetAll();
         }
 
         [HttpGet("{id}")]
         public Category GetById(int id)
         {
-            return CategoryService.Get(id);
+            CategoryService service = new CategoryService();
+            return service.Get(id);
         }
         [HttpPost]
         public void Post(Category category)
         {
-            CategoryService.Update(category);
+            CategoryService service = new CategoryService();
+            service.Post(category);
         }
 
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            CategoryService.Delete(id);
+            CategoryService service = new CategoryService();
+             service.Delete(id);
         }
 
 
