@@ -1,5 +1,7 @@
 ﻿using Inventory.Data;
 using Inventory.Models;
+using Inventory.Repositories.Interfaces;
+using Inventory.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,44 +9,35 @@ using System.Threading.Tasks;
 
 namespace Inventory.Services
 {
-    public  class ProductService
+    public  class ProductService : IProductService
     {
-      
-        public ProductService()
+        IProductRepository _productRepository;
+        public ProductService(IProductRepository  productRepository )
         {
-            
+            this._productRepository = productRepository;
         }
         // getall vai receber products 
-        public  List<Product> GetAll()
-        {
-            Context _context = new Context();
-            return  _context.Product.ToList();
-        }
-        public  Product? Get(int id) 
-        {
-            Context _context = new Context();
-            return _context.Product.FirstOrDefault(p => p.Id_Product == id); 
-        }
+        public  List<Product> GetAll() => _productRepository.GetAll();
+      
+        public  Product? Get(int id) => _productRepository.Get(id);
+       
             //add vai recever um product, o id do product vai ser defido pelo id passado mais 1
-            public  void Add(Product product)
-        {
-            Context _context = new Context();
-            _context.Product.Add(product);
-        }
+        public  void Add(Product product) => _productRepository.Add(product);
+
         // o delete vai receber 1 inteiro, no caso vou escolher o id do produto , diferente disso ele nã oretorna nada
         public void Delete(int id)
         {
-            Context _context = new Context();
-            var product = Get(id);
-            if (product is null)
-                return;
-            _context.Remove(product);
+            var produtoDeletar = _productRepository.Get(id);
+            if(produtoDeletar != null)
+                _productRepository.Delete(produtoDeletar);
         }
+     
         public void Update(Product product)
         {
-            Context _context = new Context();
-            _context.Product.Update(product);
+            if(product != null)
+                _productRepository.Update(product);
         }
+    
     
     }
 }
