@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Inventory.Data;
 using Inventory.Repositories;
@@ -15,6 +17,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.OpenApi.Models;
 
 namespace Inventory
 {
@@ -36,6 +40,15 @@ namespace Inventory
             services.AddScoped<IProductService, ProductService>();
             services.AddControllers();
             services.AddDbContext<Context>();
+            services.AddSwaggerGen(
+                  c => {
+                      var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                      var fileName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name+".xml";
+                      var xml = Path.Combine(basePath, fileName);
+                      c.SwaggerDoc("v1", new OpenApiInfo { Title = "Inventory API", Version = "v1" });
+                      c.IncludeXmlComments(xml);
+                  }
+                  );
 
         }
 
@@ -57,6 +70,16 @@ namespace Inventory
             {
                 endpoints.MapControllers();
             });
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(
+            c => {
+                c.RoutePrefix = String.Empty;
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            }
+            );
+
         }
     }
 }
