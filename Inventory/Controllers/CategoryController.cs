@@ -30,13 +30,29 @@ namespace Inventory.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public Category GetById(int id) => _categoryService.Get(id);
+        public IActionResult GetById(int id)
+        {
+            Category verificaCategory = _categoryService.Get(id);
+            if(verificaCategory == null)
+            {
+                return NotFound();
+            }
+            return Ok(verificaCategory);
+        }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="category"></param>
         [HttpPost]
-        public void Post(Category category) => _categoryService.Add(category);
+        public IActionResult Post(Category category) 
+        {
+            bool verificaAdd = _categoryService.Add(category);
+            if(verificaAdd == true)
+            {
+                return Created("",category);
+            }
+            return BadRequest();
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -50,8 +66,15 @@ namespace Inventory.Controllers
         /// <param name="category"></param>
         /// <returns>No Content</returns>
         [HttpPut]
-        public void Put(Category category) => _categoryService.Update(category);
-       
+        public IActionResult Put(Category category)
+        {
+            bool VerificaUpdate = _categoryService.Update(category);
+            if(VerificaUpdate == true)
+            {
+                return NoContent();
+            }
+            return BadRequest(VerificaUpdate);
+        }
 
 
 

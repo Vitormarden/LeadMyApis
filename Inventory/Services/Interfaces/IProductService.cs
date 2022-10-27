@@ -9,11 +9,11 @@ namespace Inventory.Services.Interface
 
         Product? Get(int id);
 
-        void Add(Product product);
+        bool Add(Product product);
 
         void Delete(int id);
 
-        void Update(Product product);
+        bool Update(Product product);
 
     }
 }

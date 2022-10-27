@@ -25,7 +25,16 @@ namespace Inventory.Services
        
         //=> Category.FirstOrDefault(p => p.Id == id);
         //add vai recever um product, o id do product vai ser defido pelo id passado mais 1
-        public void Add(Category category) => _categoryRepository.Add(category);
+        public bool Add(Category category)
+        { 
+            Category verificaIdCategory = Get(category.Id_Category);
+            if(verificaIdCategory == null) 
+            { 
+                _categoryRepository.Add(category); 
+                return true;
+            }
+            return false;
+        }
         
         // o delete vai receber 1 inteiro, no caso vou escolher o id do produto , diferente disso ele nã oretorna nada
         public void Delete(int id)
@@ -36,10 +45,15 @@ namespace Inventory.Services
         }
            
        
-        public void Update(Category category)
+        public bool Update(Category category)
         {
-            if (category != null)
-                _categoryRepository.Update(category);
+            Category categoryById = _categoryRepository.Get(category.Id_Category);
+            if(categoryById != null)
+            {
+                _categoryRepository.Add(category);
+                return true;
+            }
+            return false;
         }
        
     }

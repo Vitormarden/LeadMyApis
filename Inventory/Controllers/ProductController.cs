@@ -29,7 +29,15 @@ namespace Inventory.Controllers
         /// <param name="id"></param>
         /// <returns> Ok</returns>
         [HttpGet("{id}")]
-        public Product GetById(int id) => _productService.Get(id);
+        public IActionResult GetById(int id) 
+        { 
+            Product verificaProduto = _productService.Get(id);
+            if (verificaProduto == null)
+            {
+                return NotFound();
+            }
+            return Ok(verificaProduto);
+        }
         
         // criar um novo produto
         /// <summary>
@@ -38,8 +46,16 @@ namespace Inventory.Controllers
         /// <param name="product"></param>
         /// <returns>Created</returns>
         [HttpPost]
-        public void Post(Product product) => _productService.Add(product);
-       
+        public IActionResult Post(Product product)
+        {
+            bool verificaAdd = _productService.Add(product);
+            if(verificaAdd == true)
+            {
+                return Created("", product);
+
+            }
+            return BadRequest();
+        }
         // put adiciona um produto novo, como o update retorno um product, basta colocar o nome do produto
         /// <summary>
         /// create a new product 
@@ -47,7 +63,15 @@ namespace Inventory.Controllers
         /// <param name="product"></param>
         /// <returns>No content</returns>
         [HttpPut]
-        public void Put(Product product) => _productService.Update(product);
+        public IActionResult Put(Product product)
+        {
+            bool verificaUpdate = _productService.Update(product);
+            if(verificaUpdate == true)
+            {
+                return NoContent();
+            }
+            return BadRequest(verificaUpdate);
+        }
       
         // delte deleta o produto pelo id, basta apenas colocar o id do produto que quer o deletar
         /// <summary>
