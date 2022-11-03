@@ -22,7 +22,11 @@ namespace Inventory.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public List<Category> Get() => _categoryService.GetAll();
+        public IActionResult  Get()
+        {
+            List<Category> categories =_categoryService.GetAll(); 
+            return Ok(categories);
+        }
 
         /// <summary>
         /// 
@@ -32,12 +36,16 @@ namespace Inventory.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
+            if (id <=0)
+                return BadRequest("Id passado não pode ser menor que 0");
+                
             Category verificaCategory = _categoryService.Get(id);
             if(verificaCategory == null)
             {
                 return NotFound();
             }
             return Ok(verificaCategory);
+
         }
         /// <summary>
         /// 
@@ -59,7 +67,15 @@ namespace Inventory.Controllers
         /// <param name="id"></param>
         /// <returns>No Content</returns>
         [HttpDelete("{id}")] 
-        public void Delete(int id) => _categoryService.Delete(id);
+        public IActionResult Delete(int id)
+        {
+            if (id <= 0)
+                return BadRequest();
+
+            _categoryService.Delete(id);
+            return NoContent();
+        } 
+
         /// <summary>
         /// 
         /// </summary>

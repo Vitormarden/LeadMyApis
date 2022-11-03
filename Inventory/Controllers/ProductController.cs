@@ -21,7 +21,13 @@ namespace Inventory.Controllers
         /// </summary>
         /// <returns> Ok </returns>
         [HttpGet]
-        public IEnumerable<Product> Get() => _productService.GetAll();
+        public IActionResult Get()
+        {
+            IEnumerable<Product> products =_productService.GetAll();
+            return Ok(products);
+
+        }
+
         // get com id, retorna um produto especifico 
         /// <summary>
         /// get a product by its id 
@@ -72,15 +78,22 @@ namespace Inventory.Controllers
             }
             return BadRequest(verificaUpdate);
         }
-      
+
         // delte deleta o produto pelo id, basta apenas colocar o id do produto que quer o deletar
         /// <summary>
         /// delete product by its id
         /// </summary>
         /// <param name="id"></param>
         /// <returns>No Content</returns>
-        [HttpDelete("{id}")] 
-        public void Delete(int id ) => _productService.Delete(id);
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id) 
+        {
+            if (id <= 0)
+                return BadRequest();
+            _productService.Delete(id);
+            return NoContent();
+
+        }
       
     }
 }
