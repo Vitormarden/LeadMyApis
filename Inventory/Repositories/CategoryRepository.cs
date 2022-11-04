@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Inventory.Data;
 using Inventory.Models;
 using Inventory.Repositories.Interfaces;
 using Inventory.Services.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace Inventory.Repositories
 {
@@ -16,34 +18,32 @@ namespace Inventory.Repositories
         }
       
         // getall vai receber products 
-        public List<Category> GetAll()
+        public async Task<List<Category>> GetAll()
         {
-            return _context.Category.ToList();
+            return await _context.Category.ToListAsync();
         }
 
-        public Category? Get(int id)
+        public async Task<Category?> Get(int id)
         {
-            return _context.Category.FirstOrDefault(p => p.Id_Category == id);
+             return await _context.Category.FirstOrDefaultAsync(p => p.Id_Category == id);
         }
         //=> Category.FirstOrDefault(p => p.Id == id);
         //add vai recever um product, o id do product vai ser defido pelo id passado mais 1
-        public void Add(Category category)
+        public async Task Add(Category category)
         {
             _context.Category.Add(category);                      //category.Id = nextId++;
-            _context.SaveChanges();                                                     //Category.Add(category);
+            await _context.SaveChangesAsync();                                                     //Category.Add(category);
         }
         // o delete vai receber 1 inteiro, no caso vou escolher o id do produto , diferente disso ele nã oretorna nada
-        public void Delete(Category categoryDelete)
+        public async Task Delete(Category categoryDelete)
         {
-
-         
             _context.Category.Remove(categoryDelete);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public void Update(Category category)
+        public async Task Update(Category category)
         {
             _context.Category.Update(category);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
 
         }

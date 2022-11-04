@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Inventory.Controllers;
 using Inventory.Models;
 using Inventory.Services;
@@ -22,14 +23,14 @@ namespace Inventory.UnitTest
         [Theory]
         [InlineData(50)]
         [InlineData(100)]
-        public void GetCategoryByID_ShouldReturnOk_WhenIdIsValid(int categoryId)
+        public async Task GetCategoryByID_ShouldReturnOk_WhenIdIsValid(int categoryId)
         {
             //Arrange
-            Category categoryMockResult = new Category { Id_Category = categoryId };
-            _categoryServiceMock.Setup(categoryService => categoryService.Get(categoryId)).Returns(categoryMockResult);
+            Category  categoryMockResult = new Category { Id_Category = categoryId };
+            _categoryServiceMock.Setup(categoryService => categoryService.Get(categoryId)).Returns(Task.FromResult(categoryMockResult));
 
             //Act
-            var response = _categoryController.GetById(categoryId);
+            var response = await _categoryController.GetById(categoryId);
             var statuscode = (response as ObjectResult).StatusCode;
 
             //Assert
@@ -38,13 +39,13 @@ namespace Inventory.UnitTest
         }
         [Theory]
         [InlineData(-100)]
-        public void GetCategoryByID_ShouldeReturnBadRequest_WhenIdIsInvalid(int categoryId)
+        public async Task  GetCategoryByID_ShouldeReturnBadRequest_WhenIdIsInvalid(int categoryId)
         {
             //Arrang
             Category categoryMockResult = new Category { Id_Category = categoryId };
-            _categoryServiceMock.Setup(categoryService => categoryService.Get(categoryId)).Returns(categoryMockResult);
+            _categoryServiceMock.Setup(categoryService => categoryService.Get(categoryId)).Returns(Task.FromResult(categoryMockResult));
             //Act
-            var response = _categoryController.GetById(categoryId);
+            var response = await _categoryController.GetById(categoryId);
             var statuscode = (response as ObjectResult).StatusCode;
             //Assert
             Assert.Equal(400, statuscode);

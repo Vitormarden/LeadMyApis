@@ -5,6 +5,7 @@ using Inventory.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Inventory.Services
 {
@@ -19,38 +20,38 @@ namespace Inventory.Services
 
 
         // getall vai receber products 
-        public List<Category> GetAll() => _categoryRepository.GetAll();
+        public async Task<List<Category>> GetAll() => await _categoryRepository.GetAll();
         
-        public Category? Get(int id) => _categoryRepository.Get(id);
+        public async Task<Category?> Get(int id) => await _categoryRepository.Get(id);
        
         //=> Category.FirstOrDefault(p => p.Id == id);
         //add vai recever um product, o id do product vai ser defido pelo id passado mais 1
-        public bool Add(Category category)
+        public async Task<bool> Add(Category category)
         { 
-            Category verificaIdCategory = Get(category.Id_Category);
+            Category verificaIdCategory = await Get(category.Id_Category);
             if(verificaIdCategory == null) 
             { 
-                _categoryRepository.Add(category); 
+                await _categoryRepository.Add(category); 
                 return true;
             }
             return false;
         }
         
         // o delete vai receber 1 inteiro, no caso vou escolher o id do produto , diferente disso ele nã oretorna nada
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            var categoryDeletar = _categoryRepository.Get(id);
+            var categoryDeletar = await _categoryRepository.Get(id);
             if (categoryDeletar != null)
-                _categoryRepository.Delete(categoryDeletar);
+                await _categoryRepository.Delete(categoryDeletar);
         }
            
        
-        public bool Update(Category category)
+        public async Task<bool> Update(Category category)
         {
-            Category categoryById = _categoryRepository.Get(category.Id_Category);
+            Category categoryById = await _categoryRepository.Get(category.Id_Category);
             if(categoryById != null)
             {
-                _categoryRepository.Add(category);
+                await _categoryRepository.Add(category);
                 return true;
             }
             return false;

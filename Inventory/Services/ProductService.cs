@@ -21,41 +21,39 @@ namespace Inventory.Services
             this._categoryRepository = categoryRepository;
         }
         // getall vai receber products 
-        public  List<Product> GetAll() => _productRepository.GetAll();
+        public  async Task<List<Product>> GetAll() => await _productRepository.GetAll();
       
-        public  Product? Get(int id) => _productRepository.Get(id);
+        public async Task<Product?> Get(int id) => await _productRepository.Get(id);
 
         //add vai recever um product, o id do product vai ser defido pelo id passado mais 1
-        public bool Add(Product product) 
+        public async Task<bool> Add(Product product) 
         {
 
-            Product productById = Get(product.Id_Product);
-            Category categoryById = _categoryRepository.Get(product.Id_Category);
+            Product productById = await Get(product.Id_Product);
+            Category categoryById = await _categoryRepository.Get(product.Id_Category);
             if (productById == null && categoryById != null) 
             {
-                _productRepository.Add(product);
+                await _productRepository.Add(product);
                 return true;
             }
             return false;
 
-            
-
         }
         // o delete vai receber 1 inteiro, no caso vou escolher o id do produto , diferente disso ele nã oretorna nada
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            var produtoDeletar = _productRepository.Get(id);
+            var produtoDeletar = await _productRepository.Get(id);
             if(produtoDeletar != null)
-                _productRepository.Delete(produtoDeletar);
+                await _productRepository.Delete(produtoDeletar);
         }
      
-        public bool Update(Product product)
+        public async Task<bool> Update(Product product)
         {
-            Product productByID = _productRepository.Get(product.Id_Product);
-            Category categoryById = _categoryRepository.Get(product.Id_Category);
+            Product productByID = await _productRepository.Get(product.Id_Product);
+            Category categoryById = await _categoryRepository.Get(product.Id_Category);
             if(productByID != null && categoryById != null)
             {
-                _productRepository.Update(product);
+                await _productRepository.Update(product);
                 return true;
             }
             return false;

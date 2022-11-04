@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Inventory.Models;
 using Inventory.Services;
 using Inventory.Services.Interface;
@@ -21,9 +22,9 @@ namespace Inventory.Controllers
         /// </summary>
         /// <returns> Ok </returns>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<Product> products =_productService.GetAll();
+            IEnumerable<Product> products =await _productService.GetAll();
             return Ok(products);
 
         }
@@ -35,9 +36,9 @@ namespace Inventory.Controllers
         /// <param name="id"></param>
         /// <returns> Ok</returns>
         [HttpGet("{id}")]
-        public IActionResult GetById(int id) 
+        public async Task<IActionResult> GetById(int id) 
         { 
-            Product verificaProduto = _productService.Get(id);
+            Product verificaProduto = await _productService.Get(id);
             if (verificaProduto == null)
             {
                 return NotFound();
@@ -52,9 +53,9 @@ namespace Inventory.Controllers
         /// <param name="product"></param>
         /// <returns>Created</returns>
         [HttpPost]
-        public IActionResult Post(Product product)
+        public async Task<IActionResult> Post(Product product)
         {
-            bool verificaAdd = _productService.Add(product);
+            bool verificaAdd = await _productService.Add(product);
             if(verificaAdd == true)
             {
                 return Created("", product);
@@ -69,9 +70,9 @@ namespace Inventory.Controllers
         /// <param name="product"></param>
         /// <returns>No content</returns>
         [HttpPut]
-        public IActionResult Put(Product product)
+        public async Task<IActionResult> Put(Product product)
         {
-            bool verificaUpdate = _productService.Update(product);
+            bool verificaUpdate = await _productService.Update(product);
             if(verificaUpdate == true)
             {
                 return NoContent();
@@ -86,11 +87,11 @@ namespace Inventory.Controllers
         /// <param name="id"></param>
         /// <returns>No Content</returns>
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id) 
+        public async Task<IActionResult> Delete(int id) 
         {
             if (id <= 0)
                 return BadRequest();
-            _productService.Delete(id);
+            await _productService.Delete(id);
             return NoContent();
 
         }

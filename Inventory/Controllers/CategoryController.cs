@@ -22,9 +22,9 @@ namespace Inventory.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult  Get()
+        public async Task<IActionResult> Get()
         {
-            List<Category> categories =_categoryService.GetAll(); 
+            List<Category> categories = await _categoryService.GetAll(); 
             return Ok(categories);
         }
 
@@ -34,12 +34,12 @@ namespace Inventory.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             if (id <=0)
                 return BadRequest("Id passado não pode ser menor que 0");
                 
-            Category verificaCategory = _categoryService.Get(id);
+            Category verificaCategory = await _categoryService.Get(id);
             if(verificaCategory == null)
             {
                 return NotFound();
@@ -52,9 +52,9 @@ namespace Inventory.Controllers
         /// </summary>
         /// <param name="category"></param>
         [HttpPost]
-        public IActionResult Post(Category category) 
+        public async Task<IActionResult> Post(Category category) 
         {
-            bool verificaAdd = _categoryService.Add(category);
+            bool verificaAdd = await _categoryService.Add(category);
             if(verificaAdd == true)
             {
                 return Created("",category);
@@ -67,12 +67,12 @@ namespace Inventory.Controllers
         /// <param name="id"></param>
         /// <returns>No Content</returns>
         [HttpDelete("{id}")] 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0)
                 return BadRequest();
 
-            _categoryService.Delete(id);
+            await _categoryService.Delete(id);
             return NoContent();
         } 
 
@@ -82,9 +82,9 @@ namespace Inventory.Controllers
         /// <param name="category"></param>
         /// <returns>No Content</returns>
         [HttpPut]
-        public IActionResult Put(Category category)
+        public async Task<IActionResult> Put(Category category)
         {
-            bool VerificaUpdate = _categoryService.Update(category);
+            bool VerificaUpdate = await _categoryService.Update(category);
             if(VerificaUpdate == true)
             {
                 return NoContent();

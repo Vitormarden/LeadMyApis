@@ -1,19 +1,20 @@
 ﻿using Inventory.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Inventory.Services.Interface
 {
     public interface ICategoryService
     {
-        List<Category> GetAll();
+        Task<List<Category>> GetAll();
 
-        Category? Get(int id);
+        Task<Category?> Get(int id);
 
-        bool Add(Category category);
+        Task<bool> Add (Category category);
 
-        void Delete(int id);
+        Task Delete(int id);
 
-        bool Update(Category category);
+        Task<bool> Update(Category category);
  
 
     }

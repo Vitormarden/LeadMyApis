@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Inventory.Models;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
@@ -6,13 +7,13 @@ namespace Inventory.Repositories.Interfaces
 {
     public interface ICategoryRepository 
     {
-        List<Category> GetAll();
-        Category? Get(int id);
+        Task<List<Category>> GetAll();
+        Task<Category?> Get(int id);
 
-        void Add(Category category);
+        Task Add(Category category);
         
-        void Update(Category category);
-        void Delete(Category categoryDeletar);
+        Task Update(Category category);
+        Task Delete(Category categoryDeletar);
     }
 
 

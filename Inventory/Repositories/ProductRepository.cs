@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Inventory.Data;
 using Inventory.Models;
 using Inventory.Repositories.Interfaces;
 using Inventory.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Inventory.Repositories
 {
@@ -15,27 +17,29 @@ namespace Inventory.Repositories
             _context = context;
 
         }
-        public List<Product> GetAll()
+        public async Task<List<Product>> GetAll()
         {
-            return _context.Product.ToList();
+            return await _context.Product.ToListAsync();
         }
-        public Product? Get(int id)
+        public async Task<Product?> Get(int id)
         {
-            return _context.Product.FirstOrDefault(p => p.Id_Product == id);
+            return await _context.Product.FirstOrDefaultAsync(p => p.Id_Product == id);
         }
-        public void Add(Product product)
+        public async Task Add(Product product)
         {
             _context.Product.Add(product);
+            await _context.SaveChangesAsync();
         }
-        public void Delete(Product produtoDeletar)
+        public async Task  Delete(Product produtoDeletar)
         {
             
             _context.Remove(produtoDeletar);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public void Update(Product product)
+        public async Task Update(Product product)
         {
             _context.Product.Update(product);
+            await _context.SaveChangesAsync();
         }
     }
 }
